@@ -85,7 +85,10 @@ def account_createmessage():
 	if form.validate():
 		reciever = form.reciever.data
 		message = form.message.data
-		pubkey = DB.get_pubkey(reciever)
+		try:
+			pubkey = DB.get_pubkey(reciever)
+		except TypeError:
+			return(render_template('account.html', createmessageform=form, onloadmessage="Такого пользователя не существует", messages=DB.get_messages(current_user.get_id())))
 		enc_message = rsa_engine.encrypt_message(reciever, message, pubkey)
 		messageid = DB.add_message(reciever, message, enc_message, current_user.get_id())
 		return(redirect(url_for('account')))
