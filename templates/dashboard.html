@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block metarefresh %}
+	<meta http-equiv="refresh" content="10">
+{% endblock %}
+{% block content %}
+
+	<style>
+		.enc {
+		word-break: break-all;		
+		}	
+	</style>
+	<div clas
+
+	<div class="jumbotron">
+		<div class="container">
+			<h1>Полученные сообщения</h1>
+		</div>
+	</div>
+	
+	<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h2>Сообщения</h2>
+					{% if messages%}
+						<table class="table table-striped">
+							<tr>
+								<th>Отправитель</th>
+								<th>Получатель</th>
+								<th>Сообщение</th>
+								<th>Зашифрованное сообщение</th>							
+							</tr>
+							{% for message in messages %}
+								<tr>		
+									<td>{{message.owner}}</td>		
+									<td>{{message.reciever}}</td>			
+									<td>{{message.message}}</td>		
+									<td class="enc">{{message.enc_message}}</td>			
+								</tr>		
+						{% endfor %}						
+						</table>
+					{% else %}
+						<p>У вас пока нет сообщений</p>
+					{% endif %}					
+				</div>			
+			</div>		
+		</div>
+{% endblock %}

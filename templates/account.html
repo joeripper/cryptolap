@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<style>
+		.enc {
+		word-break: break-all;		
+		}	
+	</style>
+	<div class="jumbotron">
+		<div class="container">
+			<h1>Создать сообщение</h1>
+			<p>Выбирайте получателя и пишите сообщение</p>		
+		</div>	
+	</div>
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10">
+				<h2>Сообщения</h2>
+					<table class="table table-condensed">
+						<tr>
+							<th>Отправитель</th>
+							<th>Получатель</th>
+							<th>Сообщение</th>
+							<th>Зашифрованное сообщение</th>
+						</tr>	
+						{% for message in messages %}
+							<tr>		
+								<td>{{message.owner}}</td>		
+								<td>{{message.reciever}}</td>			
+								<td>{{message.message}}</td>		
+								<td class="enc">{{message.enc_message}}</td>			
+							</tr>		
+						{% endfor %}		
+					</table>
+			</div>
+				<div class="col-md-6">
+					<h2>Создать новое сообщение</h2>
+					<form class="form-inline" action="/account/createmessage" method="POST">
+						<div class="form-group">
+							{{ createmessageform.csrf_token }}
+							{{ createmessageform.message(class="form-control", rows="3", cols="40", placeholder="Ваше сообщение")}}
+							{{ createmessageform.reciever(class="form-control", placeholder="Получатель сообщения")}}
+							{{ createmessageform.submit(value="Написать", class="btn btn-primary")}}							
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>		
+	</div>	
+{% endblock %}

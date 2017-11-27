@@ -1,0 +1,6 @@
+venv-cryptolap
+config.py
+*.pyc
+*~
+*pub_key
+*priv_key
