@@ -18,7 +18,7 @@ from forms import RegistrationForm, LoginForm, CreateMessageForm
 import rsa_engine
 import config 
 
-if config.test
+if config.test:
 	from mockdbhelper import MockDBHelper as DBHelper
 else:
 	from dbhelper import DBHelper
@@ -44,8 +44,8 @@ def register():
 			return(render_template('home.html', loginform=LoginForm(), registrationform = form ))
 		salt = PH.get_salt()
 		hashed = PH.get_hash(form.password2.data + salt)
-		DB.add_user(form.email.data, salt, hashed)
-		rsa_engine.create_keys(form.email.data)
+		pub_key, priv_key = rsa_engine.create_keys(form.email.data)
+		DB.add_user(form.email.data, salt, hashed, pub_key, priv_key)
 		return(render_template('home.html', loginform=LoginForm(), registrationform=form, onloadmessage='Регистрация прошла успешно! Войдите в систему.'))
 	return(render_template('home.html', loginform=LoginForm(), registrationform=form))
 	
@@ -85,7 +85,8 @@ def account_createmessage():
 	if form.validate():
 		reciever = form.reciever.data
 		message = form.message.data
-		enc_message = rsa_engine.encrypt_message(reciever, message)
+		pubkey = DB.get_pubkey(reciever)
+		enc_message = rsa_engine.encrypt_message(reciever, message, pubkey)
 		messageid = DB.add_message(reciever, message, enc_message, current_user.get_id())
 		return(redirect(url_for('account')))
 	return(render_template('account.html', createmessageform=form,messages=DB.get_messages(current_user.get_id())))
