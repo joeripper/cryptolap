@@ -45,6 +45,7 @@ def register():
 		salt = PH.get_salt()
 		hashed = PH.get_hash(form.password2.data + salt)
 		DB.add_user(form.email.data, salt, hashed)
+		rsa_engine.create_keys(form.email.data)
 		return(render_template('home.html', loginform=LoginForm(), registrationform=form, onloadmessage='Регистрация прошла успешно! Войдите в систему.'))
 	return(render_template('home.html', loginform=LoginForm(), registrationform=form))
 	
