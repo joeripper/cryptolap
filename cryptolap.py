@@ -10,13 +10,18 @@ from flask.ext.login import login_user
 from flask.ext.login import logout_user
 from flask.ext.login import current_user
 
-from mockdbhelper import MockDBHelper as DBHelper
+#from mockdbhelper import MockDBHelper as DBHelper
 from passwordhelper import PasswordHelper
 from user import User
 from forms import RegistrationForm, LoginForm, CreateMessageForm
 
 import rsa_engine
 import config 
+
+if config.test
+	from mockdbhelper import MockDBHelper as DBHelper
+else:
+	from dbhelper import DBHelper
 
 DB = DBHelper()
 PH = PasswordHelper()
